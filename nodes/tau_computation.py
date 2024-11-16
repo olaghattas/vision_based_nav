@@ -7,6 +7,8 @@ from sensor_msgs.msg import Image
 import numpy as np
 from cv_bridge import CvBridgeError, CvBridge
 import cv2
+import time
+import os
 
 ############################################################################################
 # Initialization of the variables for setting the limits of the ROIs
@@ -120,14 +122,18 @@ def tau_final_value(self, vector, cnt):
 ###########################################################################################
 
 # Visual representation of the ROIs with the average TTT values
-def draw_image_segmentation(curr_image, tau_el, tau_er, tau_l, tau_r, tau_c):
-
+def draw_image_segmentation(curr_image, tau_el, tau_er, tau_l, tau_r, tau_c, directory1, directory2 ):
+    
+    timestamp = time.strftime("%Y-%m-%d_%H-%M-%S")
     color_image = cv2.cvtColor(curr_image, cv2.COLOR_GRAY2BGR)
     color_blue = [255, 225, 0]  
     color_green = [0, 255, 0]
     color_red = [0, 0, 255]
     linewidth = 3
     font = cv2.FONT_HERSHEY_SIMPLEX
+    
+    output_file = directory1 + 'f/image_{timestamp}.jpg'  # Modify the file path as needed
+    cv2.imwrite(output_file, color_image)
 
     # Extreme left and extreme right
     cv2.rectangle(color_image, (x_init_el, y_init_el), (x_end_el, y_end_el), color_blue, linewidth)
@@ -153,10 +159,14 @@ def draw_image_segmentation(curr_image, tau_el, tau_er, tau_l, tau_r, tau_c):
                 (int((x_end_c + x_init_c) / 2.1), int((y_end_c + y_init_c) / 2)),
                 font, 1, (0, 0, 255), 2, cv2.LINE_AA)
 
-    cv2.namedWindow('ROIs Representation', cv2.WINDOW_NORMAL)
-    cv2.resizeWindow('ROIs Representation', (600, 600))
-    cv2.imshow('ROIs Representation', color_image)
-    cv2.waitKey(10)
+    
+    output_file = directory2 + 'f/grid_image_{timestamp}.jpg'  # Modify the file path as needed
+    cv2.imwrite(output_file, color_image) 
+    
+    # cv2.namedWindow('ROIs Representation', cv2.WINDOW_NORMAL)
+    # cv2.resizeWindow('ROIs Representation', (600, 600))
+    # cv2.imshow('ROIs Representation', color_image)
+    # cv2.waitKey(10)
 
 #######################################################################################################################
 
@@ -190,6 +200,18 @@ class TauComputationClass:
         self.prev_taus_c = []
         self.prev_taus_r = []
         self.prev_taus_er = []
+        
+        timestamp = time.strftime("%Y-%m-%d_%H-%M-%S")
+
+        current_directory = os.getcwd()
+        self.directory1 = os.path.join(current_directory, f'image_{timestamp}')  # Save path with folder
+        if not os.path.exists(self.directory1):
+            os.makedirs(self.directory1)
+        
+        self.directory2 = os.path.join(current_directory, f'gridimage_{timestamp}')  # Save path with folder
+        if not os.path.exists(self.directory2):
+            os.makedirs(self.directory2) 
+        
     # Callback for the Optical flow topic
     def callback_of(self, data):
 
@@ -369,7 +391,7 @@ class TauComputationClass:
 
 
         # Draw the ROIs with their TTT values
-        draw_image_segmentation(self.curr_image, final_tau_left_e, final_tau_right_e, final_tau_left, final_tau_right, final_tau_centre)
+        draw_image_segmentation(self.curr_image, final_tau_left_e, final_tau_right_e, final_tau_left, final_tau_right, final_tau_centre, self.directory1, self.directory2)
 
     # Callback for the image topic
     def callback_img(self, data):
