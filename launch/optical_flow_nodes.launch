@@ -1,0 +1,8 @@
+<launch>
+    <!-- Launch a file with the robot and environment -->
+    <include file="$(find vision_based_navigation_ttt_ml)/launch/L_shaped_corridor.launch">
+    </include> 
+    <node name="optical_flow" pkg="vision_based_navigation_ttt_ml" type="optical_flow.py"/>
+    <node name="tau_computation" pkg="vision_based_navigation_ttt_ml" type="tau_computation.py"/>
+    <node name="controller" pkg="vision_based_navigation_ttt_ml" type="controller.py" output = "screen"/>
+</launch>

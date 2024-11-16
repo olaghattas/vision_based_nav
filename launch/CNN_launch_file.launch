@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+
+<launch>
+        <!-- Launch a file with the robot and environment -->
+        <include file="$(find vision_based_navigation_ttt_ml)/launch/L_shaped_corridor.launch">
+        </include> 
+
+        <node name="tau_comp_cnn" pkg="vision_based_navigation_ttt_ml" type="tau_computation_cnn.py"/>
+        <!-- You can use another controller but since we dont need act sense cycle for tau values computed 
+        from scans I used the controller that only uses an act cycle-->
+        <node name="controller" pkg="vision_based_navigation_ttt_ml" type="controller_act_bias.py"/> 
+
+</launch>  
