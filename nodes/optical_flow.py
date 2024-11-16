@@ -96,7 +96,7 @@ class OFCalculator:
 	def __init__(self, param):
 
 		########## IMPORTANT PARAMETERS: ##########
-		self.image_sub_name = "/realsense/color/image_raw" # NOTE: change topic name depending on real or sim
+		self.image_sub_name = "/camera/rgb/image_raw" # NOTE: change topic name depending on real or sim
 		self.num_ext_features = 250
 		self.num_cen_features = 100
 		self.min_feat_threshold = 1.0

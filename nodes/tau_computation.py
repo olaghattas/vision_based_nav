@@ -168,7 +168,7 @@ class TauComputationClass:
         ######## IMPORTANT PARAMETERS: ########
         # Minimum number of features needed to compute the average TTT for each ROI
         self.min_TTT_number = 10
-        self.image_sub_name = "/realsense/color/image_raw"
+        self.image_sub_name = "/camera/rgb/image_raw"
         #######################################
 
         # First time that the callback is called

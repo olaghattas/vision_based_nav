@@ -48,11 +48,11 @@ class Controller:
 		self.max_u = 1
 		self.max_control_diff = 0.5
 
-		self.robot_publisher = "jackal_velocity_controller/cmd_vel"
+		self.robot_publisher = "/cmd_vel"
 		#######################################
 
 		# Tau Data Subscriber
-		self.tau_values = rospy.Subscriber("tau_values_combo", TauComputation, self.callback)
+		self.tau_values = rospy.Subscriber("tau_values_of", TauComputation, self.callback)
 
 		# Variables initialization
 		# Sense and Act cycles variables
